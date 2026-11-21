@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Portal - Login & Register</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #e5d8ff, #c9d7ff);
+            padding: 20px;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            position: relative;
+            width: 850px;
+            max-width: 100%;
+            min-height: 550px;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 14px 38px rgba(54, 25, 90, 0.18);
+        }
+
+        /* FORM BOX */
+        .form-box {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            transition: 0.6s ease-in-out;
+            z-index: 1;
+        }
+
+        .form-box form {
+            width: 78%;
+        }
+
+        .form-box h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #292929;
+        }
+
+        .form-box.login {
+            right: 0;
+        }
+
+        .form-box.register {
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-20%);
+        }
+
+        /* INPUT BOX */
+        .input-box {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 14px 45px 14px 18px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            outline: none;
+            background: #f1eff6;
+            color: #292929;
+            font-size: 14px;
+            transition: 0.25s ease;
+        }
+
+        .input-box input:focus {
+            border-color: #831080;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(131, 16, 128, 0.08);
+        }
+
+        .input-box i {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 18px;
+            transition: 0.25s;
+        }
+
+        .input-box input:focus + i {
+            color: #831080;
+        }
+
+        .error-msg {
+            color: #d93025 !important;
+            font-size: 12px !important;
+            margin: 4px 0 !important;
+            min-height: 18px;
+        }
+
+        /* BUTTONS */
+        .btn {
+            width: 78%;
+            height: 46px;
+            border: none;
+            border-radius: 12px;
+            background: #831080;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: 0.25s ease;
+            box-shadow: 0 6px 16px rgba(131, 16, 128, 0.25);
+        }
+
+        .btn:hover {
+            background: #680b68;
+            transform: translateY(-2px);
+        }
+
+        .forgot {
+            display: block;
+            margin: 10px 0;
+            color: #831080;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .forgot:hover {
+            text-decoration: underline;
+        }
+
+        .form-box p {
+            margin: 16px 0 10px;
+            color: #6b6b7b;
+            font-size: 13px;
+        }
+
+        /* SOCIAL ICONS */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .social-icons a {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1.5px solid #e2dfec;
+            border-radius: 11px;
+            color: #292929;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.25s ease;
+        }
+
+        .social-icons a:hover {
+            border-color: #831080;
+            color: #831080;
+            background: rgba(131, 16, 128, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* SLIDING TOGGLE PANELS */
+        .toggle-box {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .toggle-box::before {
+            content: '';
+            position: absolute;
+            left: -250%;
+            width: 300%;
+            height: 100%;
+            background: linear-gradient(160deg, #981895, #6c086a);
+            border-radius: 150px;
+            transition: 0.8s ease-in-out;
+        }
+
+        .toggle-panel {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 35px;
+            transition: 0.6s ease-in-out;
+        }
+
+        .toggle-panel h2 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .toggle-panel p {
+            font-size: 14px;
+            margin-bottom: 20px;
+            opacity: 0.92;
+        }
+
+        .toggle-left {
+            left: 0;
+        }
+
+        .toggle-right {
+            right: -50%;
+        }
+
+        .btn.outline {
+            width: 170px;
+            background: transparent;
+            border: 2px solid white;
+            box-shadow: none;
+            pointer-events: auto;
+        }
+
+        .btn.outline:hover {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        /* ANIMATION STATES */
+        .container.active .form-box.login {
+            transform: translateX(20%);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .container.active .form-box.register {
+            transform: translateX(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .container.active .toggle-box::before {
+            left: 50%;
+        }
+
+        .container.active .toggle-left {
+            left: -50%;
+        }
+
+        .container.active .toggle-right {
+            right: 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 650px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                min-height: 720px;
+            }
+
+            .form-box {
+                width: 100%;
+                height: 70%;
+                padding: 28px 24px;
+            }
+
+            .form-box form {
+                width: 90%;
+            }
+
+            .form-box.login {
+                top: 0;
+                right: 0;
+            }
+
+            .form-box.register {
+                top: 0;
+                left: 0;
+                transform: translateY(-20%);
+            }
+
+            .container.active .form-box.login {
+                transform: translateY(-20%);
+            }
+
+            .container.active .form-box.register {
+                transform: translateY(0);
+            }
+
+            .toggle-box::before {
+                left: 0;
+                top: -270%;
+                width: 100%;
+                height: 300%;
+                border-radius: 20vw;
+            }
+
+            .toggle-panel {
+                width: 100%;
+                height: 30%;
+                padding: 20px;
+            }
+
+            .toggle-left {
+                top: 70%;
+                left: 0;
+            }
+
+            .toggle-right {
+                top: -30%;
+                right: 0;
+            }
+
+            .container.active .toggle-box::before {
+                left: 0;
+                top: 70%;
+            }
+
+            .container.active .toggle-left {
+                top: 100%;
+                left: 0;
+            }
+
+            .container.active .toggle-right {
+                top: 70%;
+                right: 0;
+            }
+
+            .toggle-panel h2 {
+                font-size: 24px;
+            }
+
+            .toggle-panel p {
+                margin-bottom: 12px;
+            }
+
+            .btn.outline {
+                height: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="container">
+        <!-- LOGIN FORM -->
+        <div class="form-box login">
+            <form id="loginForm">
+                <h1>School Login</h1>
+                <div class="input-box">
+                    <input type="text" id="loginUser" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="loginPass" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <p id="loginError" class="error-msg"></p>
+                <a href="#" class="forgot" onclick="fillDemo(event)">Use Demo Admin Account</a>
+                <button type="submit" class="btn">Login</button>
+                <p>or login with social platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google'></i></a>
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-github'></i></a>
+                    <a href="#"><i class='bx bxl-linkedin'></i></a>
+                </div>
+            </form>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div class="form-box register">
+            <form id="registerForm">
+                <h1>Staff Register</h1>
+                <div class="input-box">
+                    <input type="text" id="regUser" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="regEmail" placeholder="School Email" required>
+                    <i class='bx bxs-envelope'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="regPass" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <button type="submit" class="btn">Register</button>
+                <p>or register with social platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google'></i></a>
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-github'></i></a>
+                    <a href="#"><i class='bx bxl-linkedin'></i></a>
+                </div>
+            </form>
+        </div>
+
+        <!-- SLIDING TOGGLE PANELS -->
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h2>Hello, Welcome educator!</h2>
+                <p>Need a staff or admin account?</p>
+                <button type="button" class="btn outline" id="registerBtn">Register</button>
+            </div>
+            <div class="toggle-panel toggle-right">
+                <h2>Welcome Back!</h2>
+                <p>Already have account?</p>
+                <button type="button" class="btn outline" id="loginBtn">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+
+        registerBtn.addEventListener('click', () => {
+            loginError.textContent = '';
+            container.classList.add('active');
+        });
+
+        loginBtn.addEventListener('click', () => {
+            loginError.textContent = '';
+            container.classList.remove('active');
+        });
+
+        localStorage.removeItem('sms_currentUser');
+
+        if (!localStorage.getItem('sms_users')) {
+            localStorage.setItem('sms_users', JSON.stringify([
+                { username: 'admin', email: 'admin@school.edu', password: '123', role: 'Principal / Admin' }
+            ]));
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('authRequired') === '1') {
+            loginError.textContent = 'Please log in first to access the dashboard.';
+        }
+
+        const activeSession = JSON.parse(sessionStorage.getItem('sms_activeSession') || 'null');
+        if (activeSession && activeSession.loggedIn) {
+            window.location.replace('dashboard.html');
+        }
+
+        function fillDemo(e) {
+            e.preventDefault();
+            document.getElementById('loginUser').value = 'admin';
+            document.getElementById('loginPass').value = '123';
+            loginError.textContent = '';
+        }
+
+        function startSession(user) {
+            sessionStorage.setItem('sms_activeSession', JSON.stringify({
+                loggedIn: true,
+                username: user.username,
+                email: user.email,
+                role: user.role || 'Faculty Staff',
+                loginAt: new Date().toISOString()
+            }));
+            window.location.replace('dashboard.html');
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('regUser').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPass').value;
+
+            const users = JSON.parse(localStorage.getItem('sms_users')) || [];
+            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                alert('Username already exists!');
+                return;
+            }
+
+            const newUser = { username, email, password, role: 'Faculty Staff' };
+            users.push(newUser);
+            localStorage.setItem('sms_users', JSON.stringify(users));
+            startSession(newUser);
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUser').value.trim();
+            const password = document.getElementById('loginPass').value;
+
+            const users = JSON.parse(localStorage.getItem('sms_users')) || [];
+            const validUser = users.find(u => u.username === username && u.password === password);
+
+            if (!validUser) {
+                loginError.textContent = 'Invalid username or password. Try "admin" / "123".';
+                return;
+            }
+
+            startSession(validUser);
+        });
+    </script>
+</body>
+</html>
